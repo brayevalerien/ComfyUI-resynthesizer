@@ -5,19 +5,31 @@ from skimage.restoration import inpaint
 from resynthesizer import TImageSynthParameters, resynthesize
 from torchvision.transforms.functional import to_pil_image
 
+matchContextTypes = [
+    "Patching",
+    "Shuffle",
+    "Brushfire (inward)",
+    "Directional (horizontal, inward)",
+    "Directional (vertical, inward)",
+    "Brushfire (outward)",
+    "Directional (horizontal, outward)",
+    "Directional (vertical, outward)",
+    "Squeeze"
+]   
+
 class Resynthesize:
+    
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                 "image": ("IMAGE", ),
                 "mask": ("IMAGE", ),
-                "isMakeSeamlesslyTileableHorizontally": ("INT", {"default": 1}),
-                "isMakeSeamlesslyTileableVertically": ("INT", {"default": 1}),
-                "matchContextType": ("INT", {"default": 1, "min": 0, "max": 8}),
+                "makeTileable": ("BOOL", {"default": False}),
+                "context": (matchContextTypes, ),
                 "mapWeight": ("FLOAT", {"default": .5, "min": 0.0, "max": 1.0, "step": .01}),
                 "sensitivityToOutliers": ("FLOAT", {"default": .117, "min": 0.0, "max": 1.0, "step": .001}),
-                "patchSize": ("INT", {"default": 30, "min": 0}),
+                "patchSize": ("INT", {"default": 30, "min": 0, "max": 60}),
                 "maxProbeCount": ("INT", {"default": 200, "min": 0}),
             }
         }
@@ -25,7 +37,7 @@ class Resynthesize:
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "resynthesize_image"
 
-    def resynthesize_image(self, image, mask, isMakeSeamlesslyTileableHorizontally, isMakeSeamlesslyTileableVertically, matchContextType, mapWeight, sensitivityToOutliers, patchSize, maxProbeCount):
+    def resynthesize_image(self, image, mask, makeTileable, context, mapWeight, sensitivityToOutliers, patchSize, maxProbeCount):
         # Convert torch tensors to PIL images, assuming that tensors are under the BHWC format used by ComfyUI
         image = image.squeeze(0).permute(2, 0, 1)
         mask = mask.squeeze(0).permute(2, 0, 1)
@@ -34,9 +46,9 @@ class Resynthesize:
         
         # Use resynthesizer to fill in the image at the place of the mask
         params = TImageSynthParameters()
-        params.isMakeSeamlesslyTileableHorizontally = isMakeSeamlesslyTileableHorizontally
-        params.isMakeSeamlesslyTileableVertically = isMakeSeamlesslyTileableVertically
-        params.matchContextType = matchContextType
+        params.isMakeSeamlesslyTileableHorizontally = int(makeTileable)
+        params.isMakeSeamlesslyTileableVertically = int(makeTileable)
+        params.matchContextType = matchContextTypes.index(context)
         params.mapWeight = mapWeight
         params.sensitivityToOutliers = sensitivityToOutliers
         params.patchSize = patchSize
@@ -46,4 +58,4 @@ class Resynthesize:
         # Convert PIL images back to torch tensors
         result = torch.Tensor(np.array(pilresult) / 255).unsqueeze(0)
             
-        return result.unsqueeze(0) # unsqueeze is necessary fsr, ComfyUI will try to squeeze it at all costs
+        return (result, )

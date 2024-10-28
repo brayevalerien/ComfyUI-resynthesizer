@@ -1,6 +1,7 @@
 # ComfyUI Resynthesizer
 This repository is a quick port of [Resynthesizer](https://github.com/bootchk/resynthesizer) to [ComfyUI](https://github.com/comfyanonymous/ComfyUI).
 
+## Introduction
 Resynthesizer is the open-source implementation of a texture generation technique proposed by Paul Harrison in 2005, especially useful for removing an object from an image (inpainting), which is most likely close to what Photoshop uses to for the content aware fill feature. Note that this is not using a diffusion model to inpaint, as opposed to many techniques of today, which makes it very fast and predictable, but sometimes yields worse results.
 
 ## Installation
