@@ -9,6 +9,6 @@ Repository = "https://github.com/brayevalerien/ComfyUI-resynthesizer"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "val"
 DisplayName = "ComfyUI-resynthesizer"
 Icon = ""
