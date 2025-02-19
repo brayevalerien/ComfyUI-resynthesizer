@@ -55,9 +55,8 @@ class Resynthesize:
         patchSize,
         maxProbeCount,
     ):
-        # Convert torch tensors to PIL images, assuming that tensors are under the BHWC format used by ComfyUI
+        # Convert torch tensor to PIL image, assuming that tensor is under the BHWC format used by ComfyUI
         image = image.squeeze(0).permute(2, 0, 1)
-        mask = mask.squeeze(0).permute(2, 0, 1)
         pilimage = to_pil_image(image)
         pilmask = to_pil_image(mask)
 
