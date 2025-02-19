@@ -5,10 +5,14 @@ This repository is a quick port of [Resynthesizer](https://github.com/bootchk/re
 Resynthesizer is the open-source implementation of a texture generation technique proposed by Paul Harrison in 2005, especially useful for removing an object from an image (inpainting), which is most likely close to what Photoshop uses to for the content aware fill feature. Note that this is not using a diffusion model to inpaint, as opposed to many techniques of today, which makes it very fast and predictable, but sometimes yields worse results.
 
 ## Installation
-This extension is not available on the manager. To add it to your ComfyUI instance, follow these instructions:
+### From the ComfyUI manager
+This is the easiest option. Open the ComfyUI manager and look for "resynthesizer". Install and restart ComfyUI.
+
+### Manual install
+Use this if the manager fails to install this extension.
 1. Inside your `ComfyUI/custom_nodes/` directory, run the command: `git clone https://github.com/brayevalerien/ComfyUI-resynthesizer`.
 2. If you are using a virtual environment (Conda or venv for instance) for ComfyUI, activate it.
-3. Install the `resynthesizer` Python library by running: `pip install resynthesizer`.
+3. Install the dependencies by running `pip install -r requirements.txt`.
 
 You should then be able to restart ComfyUI and use this extension. If not, please [open an issue](https://github.com/brayevalerien/ComfyUI-resynthesizer/issues).
 
